@@ -8,10 +8,19 @@ use App\Models\Product;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
+
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/products",
+     *     summary="Lista todos os produtos",
+     *     tags={"Products"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de todos os produtos"
+     *     )
+     * )
      */
     public function index()
     {
@@ -19,7 +28,41 @@ class ProductController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/products",
+     *     summary="Cria um novo produto",
+     *     tags={"Products"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             required={"name", "min_sell_price", "cost_price", "barcode", "status"},
+     *             @OA\Property(property="name", type="string", description="Nome do produto"),
+     *             @OA\Property(property="description", type="string", description="Descrição do produto"),
+     *             @OA\Property(property="min_sell_price", type="number", format="float", description="Preço mínimo de venda"),
+     *             @OA\Property(property="cost_price", type="number", format="float", description="Preço de custo"),
+     *             @OA\Property(property="barcode", type="string", description="Código de barras do produto"),
+     *             @OA\Property(property="weight", type="number", format="float", description="Peso do produto"),
+     *             @OA\Property(property="length", type="number", format="float", description="Comprimento do produto"),
+     *             @OA\Property(property="width", type="number", format="float", description="Largura do produto"),
+     *             @OA\Property(property="height", type="number", format="float", description="Altura do produto"),
+     *             @OA\Property(property="status", type="string", description="Status do produto"),
+     *             @OA\Property(property="color", type="string", description="Cor do produto"),
+     *             @OA\Property(property="size", type="string", description="Tamanho do produto"),
+     *             @OA\Property(property="material", type="string", description="Material do produto"),
+     *             @OA\Property(property="img_path", type="string", description="Caminho da imagem do produto")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Produto criado com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Erro de validação"
+     *     )
+     * )
+     *
      * @throws ProductException
      */
     public function store(Request $request)
@@ -79,7 +122,26 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/products/{id}",
+     *     summary="Exibe um produto especificado",
+     *     tags={"Products"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Produto encontrado"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Produto não encontrado"
+     *     )
+     * )
+     *
      * @throws ProductException
      */
     public function show($id)
@@ -96,7 +158,48 @@ class ProductController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/products/{id}",
+     *     summary="Atualiza um produto especificado",
+     *     tags={"Products"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             required={"name", "min_sell_price", "cost_price", "status"},
+     *             @OA\Property(property="name", type="string", description="Nome do produto"),
+     *             @OA\Property(property="description", type="string", description="Descrição do produto"),
+     *             @OA\Property(property="min_sell_price", type="number", format="float", description="Preço mínimo de venda"),
+     *             @OA\Property(property="cost_price", type="number", format="float", description="Preço de custo"),
+     *             @OA\Property(property="barcode", type="string", description="Código de barras do produto"),
+     *             @OA\Property(property="weight", type="number", format="float", description="Peso do produto"),
+     *             @OA\Property(property="length", type="number", format="float", description="Comprimento do produto"),
+     *             @OA\Property(property="width", type="number", format="float", description="Largura do produto"),
+     *             @OA\Property(property="height", type="number", format="float", description="Altura do produto"),
+     *             @OA\Property(property="status", type="string", description="Status do produto"),
+     *             @OA\Property(property="color", type="string", description="Cor do produto"),
+     *             @OA\Property(property="size", type="string", description="Tamanho do produto"),
+     *             @OA\Property(property="material", type="string", description="Material do produto"),
+     *             @OA\Property(property="img_path", type="string", description="Caminho da imagem do produto")
+     *
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Produto atualizado com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Produto não encontrado"
+     *     )
+     * )
+     *
      * @throws ProductException
      */
     public function update(Request $request, $id)
@@ -131,7 +234,26 @@ class ProductController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/products/{id}",
+     *     summary="Remove um produto especificado",
+     *     tags={"Products"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Produto removido com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Produto não encontrado"
+     *     )
+     * )
+     *
      * @throws ProductException
      */
     public function destroy($id)
