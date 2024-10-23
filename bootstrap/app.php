@@ -21,7 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'message' => $e->getMessage(),
                 'timestamp' => now(),
-                'code' => method_exists($e, $e->getStatusCode()) ? $e->getStatusCode() : 500,
-            ], method_exists($e, $e->getStatusCode()) ? $e->getStatusCode() : 500);
+                'code' => $e->getStatusCode(),
+            ], $e->getStatusCode());
         });
     })->create();

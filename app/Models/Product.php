@@ -26,4 +26,11 @@ class Product extends Model
         'material',
         'img_path'
     ];
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class)
+            ->using(CategoryProduct::class)
+            ->withTimestamps();
+    }
 }
